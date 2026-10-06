@@ -42,7 +42,7 @@ The following steps were performed:
 
 ## Project Structure
 
-```text
+
 ML-Mini-Project/
 │
 ├── data/
@@ -55,3 +55,18 @@ ML-Mini-Project/
 ├── ECG_CART_Model.ipynb
 │
 └── README.md
+
+Results
+The tuned CART model achieved an accuracy of 72.53%.
+The Random Forest comparison model achieved:
+- Accuracy: 73.63%
+- Precision: 67.53%
+- Recall: 73.63%
+- F1 Score: 68.49%
+The final model comparison and additional visualizations will be added to the results/ directory.
+Conclusion
+CART was successfully implemented for ECG-based heart abnormality classification. Hyperparameter tuning was used to improve the decision tree performance and control model complexity. Random Forest was used as a comparison model and achieved slightly higher test accuracy than the tuned CART model.
+Team Members
+Team 31
+- Shreya Raghuraj - PES2UG24AM154
+- Nihira - PES2UG24AM106
