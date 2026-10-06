@@ -42,7 +42,7 @@ The following steps were performed:
 
 ## Project Structure
 
-
+```text
 ML-Mini-Project/
 │
 ├── data/
@@ -55,6 +55,7 @@ ML-Mini-Project/
 ├── ECG_CART_Model.ipynb
 │
 └── README.md
+```
 
 Results
 The tuned CART model achieved an accuracy of 72.53%.
