@@ -1,73 +1,116 @@
-# Detecting Heart Abnormality using ECG with CART
+# Detecting Heart Abnormality Using ECG with CART
 
-## Problem Statement
+**Machine Learning Mini-Project - Team 31**
 
-The objective of this project is to develop a machine learning model for detecting and classifying heart abnormalities using ECG-related features. A CART (Classification and Regression Tree) decision tree is used as the primary classification model, with Random Forest used as a comparison model.
+## Overview
+
+This project implements a multiclass Classification and Regression Tree (CART) model to classify records from the UCI Arrhythmia dataset into their original arrhythmia class labels. It compares a baseline CART classifier with a hyperparameter-tuned CART classifier.
 
 ## Dataset
 
-The project uses the UCI Arrhythmia Dataset.
+- **Source:** UCI Machine Learning Repository
+- **Records:** 452
+- **Original input attributes:** 279
+- **Target:** Original arrhythmia class label
+- **Observed target labels in the supplied file:** 1–10, 14, 15, and 16
 
-- 452 samples
-- 279 original attributes
-- ECG-related features
-- 16 possible class labels in the dataset
-- Missing values represented by `?`
-- Significant class imbalance
+## Preprocessing
 
-## Methodology
+1. Read the dataset with `?` treated as a missing value.
+2. Convert input attributes to numeric values.
+3. Remove Attribute 14 (zero-based column index 13), which has 376 missing values out of 452 records (83.2%).
+4. Retain 278 input features.
+5. Impute remaining numerical missing values with the median using a scikit-learn `Pipeline`.
+6. Split data into 70% training and 30% testing using stratified sampling (`random_state=42`).
 
-The following steps were performed:
 
-1. Load the UCI Arrhythmia Dataset.
-2. Handle missing values.
-3. Remove the specified feature.
-4. Separate input features and target labels.
-5. Perform median imputation for missing numerical values.
-6. Split the dataset into training and testing sets using an 80:20 split.
-7. Train a CART Decision Tree using Gini impurity.
-8. Perform hyperparameter tuning using GridSearchCV.
-9. Evaluate the CART model.
-10. Compare CART performance with Random Forest.
-11. Analyze feature importance.
+## Models
 
-## Technologies
+### Baseline multiclass CART
+- `DecisionTreeClassifier`
+- Gini impurity
+- Default tree complexity settings
+- `random_state=42`
 
-- Python
-- Pandas
-- NumPy
-- Scikit-learn
-- Matplotlib
-- Jupyter Notebook
+### Tuned multiclass CART
+Hyperparameters are selected using `GridSearchCV`, 3-fold `StratifiedKFold`, and macro-F1 scoring. The search covers:
+- `max_depth`: `None`, 5, 7, 10, 12, 15
+- `min_samples_leaf`: 1, 2, 3, 5
+- `class_weight`: `None`, `balanced`
+- `ccp_alpha`: 0, 0.001, 0.005, 0.01
 
-## Project Structure
-
-```text
-ML-Mini-Project/
-│
-├── data/
-│   └── arrhythmia.data
-│
-├── results/
-│   ├── cart_results.csv
-│   └── feature_importance.csv
-│
-├── ECG_CART_Model.ipynb
-│
-└── README.md
+Best parameters in the recorded notebook run:
+```python
+{
+    "max_depth": 12,
+    "min_samples_leaf": 2,
+    "class_weight": "balanced",
+    "ccp_alpha": 0.01
+}
 ```
 
-Results
-The tuned CART model achieved an accuracy of 72.53%.
-The Random Forest comparison model achieved:
-- Accuracy: 73.63%
-- Precision: 67.53%
-- Recall: 73.63%
-- F1 Score: 68.49%
-The final model comparison and additional visualizations will be added to the results/ directory.
-Conclusion
-CART was successfully implemented for ECG-based heart abnormality classification. Hyperparameter tuning was used to improve the decision tree performance and control model complexity. Random Forest was used as a comparison model and achieved slightly higher test accuracy than the tuned CART model.
-Team Members
-Team 31
-- Shreya Raghuraj - PES2UG24AM154
-- Nihira - PES2UG24AM106
+## Results
+
+Results recorded in the notebook for the same held-out test set (136 records):
+
+| Metric | Baseline multiclass CART | Tuned multiclass CART |
+|---|---:|---:|
+| Accuracy | 69.12% | 55.88% |
+| Balanced accuracy | 36.98% | 39.96% |
+| Macro F1-score | 0.3657 | 0.3666 |
+
+The baseline is retained as the primary model because it has higher overall accuracy. The tuned model has slightly higher balanced accuracy and macro F1, but lower overall accuracy. These results are limited by the small dataset and severe class imbalance; rare classes have very few examples, so their estimates are unstable.
+
+## Requirements
+
+Suggested environment:
+- Python 3.10 or later
+- pandas
+- NumPy
+- Matplotlib
+- Seaborn
+- scikit-learn
+- Jupyter Notebook
+
+Install dependencies:
+
+```bash
+pip install numpy pandas matplotlib seaborn scikit-learn jupyter
+```
+
+## How to Run
+
+1. Clone the private repository:
+   ```bash
+   git clone https://github.com/nihira007/ML-Mini-Project
+   cd ML-Mini-Project
+   ```
+2. Create and activate a virtual environment (recommended).
+3. Install dependencies using the command above.
+4. Open `ECG_CART_Notebook.ipynb`.
+7. Run all cells from top to bottom.
+
+
+## Notebook Outputs
+
+The notebook includes:
+- Dataset inspection and class distribution
+- Baseline CART metrics and classification report
+- Grid-search tuning and tuned CART metrics
+- Side-by-side metric comparison
+- Baseline confusion matrix
+- Decision-tree visualization (first levels)
+- Top-10 feature-importance table and chart
+- A sample-row prediction demonstration
+
+## Reproducibility Notes
+
+- The train-test split uses `random_state=42`.
+- The decision trees use `random_state=42`.
+- Grid search uses 3-fold stratified cross-validation and macro-F1 scoring.
+- Because some classes have only one example, scikit-learn may emit a warning during 3-fold stratified cross-validation. This is an important dataset limitation, not a guarantee that every class can be validated reliably.
+
+## 
+
+- Shreya — PES2UG24AM154
+- Nihira — PES2UG24AM106
