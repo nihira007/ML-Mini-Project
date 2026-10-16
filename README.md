@@ -112,5 +112,5 @@ The notebook includes:
 
 ## 
 
-- Shreya — PES2UG24AM154
 - Nihira — PES2UG24AM106
+- Shreya — PES2UG24AM154
